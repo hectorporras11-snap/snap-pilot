@@ -7,7 +7,6 @@ const COLORS = {
   accent: '#a376ce',
   primaryLight: '#f3eef9',
   white: '#ffffff',
-  gray100: '#f9fafb',
   gray200: '#e5e7eb',
   gray400: '#9ca3af',
   gray600: '#4b5563',
@@ -35,25 +34,25 @@ const styles: any = {
   formTitle: { fontSize: '26px', fontWeight: '700', color: '#111827', margin: '0 0 8px 0' },
   formSubtitle: { fontSize: '15px', color: '#4b5563', margin: '0 0 32px 0' },
   stepsRow: { display: 'flex', alignItems: 'center', marginBottom: '36px' },
-  stepCircle: { width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '700', flexShrink: 0, transition: 'all 0.3s' },
-  stepLine: { flex: 1, height: '2px', margin: '0 8px', transition: 'background-color 0.3s' },
-  stepLabel: { fontSize: '11px', fontWeight: '600', marginTop: '4px', textAlign: 'center' as const },
+  stepCircle: { width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '700', flexShrink: 0 },
+  stepLine: { flex: 1, height: '2px', margin: '0 8px' },
+  stepLabel: { fontSize: '11px', fontWeight: '600', marginTop: '4px', textAlign: 'center' },
   fieldGroup: { marginBottom: '20px' },
-  label: { display: 'block', fontSize: '13px', fontWeight: '600', color: '#4b5563', marginBottom: '6px', letterSpacing: '0.3px' },
-  input: { width: '100%', padding: '12px 16px', border: '1.5px solid #e5e7eb', borderRadius: '10px', fontSize: '15px', fontFamily: "'Raleway', sans-serif", color: '#111827', outline: 'none', transition: 'border-color 0.2s', boxSizing: 'border-box' as const, backgroundColor: '#ffffff' },
-  btnPrimary: { width: '100%', padding: '14px', backgroundColor: '#4c1c72', color: '#ffffff', border: 'none', borderRadius: '10px', fontSize: '15px', fontWeight: '700', fontFamily: "'Raleway', sans-serif", cursor: 'pointer', transition: 'background-color 0.2s', marginTop: '8px' },
+  label: { display: 'block', fontSize: '13px', fontWeight: '600', color: '#4b5563', marginBottom: '6px' },
+  input: { width: '100%', padding: '12px 16px', border: '1.5px solid #e5e7eb', borderRadius: '10px', fontSize: '15px', fontFamily: "'Raleway', sans-serif", color: '#111827', outline: 'none', boxSizing: 'border-box', backgroundColor: '#ffffff' },
+  btnPrimary: { width: '100%', padding: '14px', backgroundColor: '#4c1c72', color: '#ffffff', border: 'none', borderRadius: '10px', fontSize: '15px', fontWeight: '700', fontFamily: "'Raleway', sans-serif", cursor: 'pointer', marginTop: '8px' },
   btnSecondary: { width: '100%', padding: '14px', backgroundColor: 'transparent', color: '#4c1c72', border: '1.5px solid #4c1c72', borderRadius: '10px', fontSize: '15px', fontWeight: '600', fontFamily: "'Raleway', sans-serif", cursor: 'pointer', marginTop: '10px' },
-  loginLink: { textAlign: 'center' as const, marginTop: '24px', fontSize: '14px', color: '#4b5563' },
-  link: { color: '#4c1c72', fontWeight: '600', textDecoration: 'none' },
   tipoGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' },
-  tipoCard: { padding: '20px 16px', border: '2px solid #e5e7eb', borderRadius: '12px', cursor: 'pointer', textAlign: 'center' as const, transition: 'all 0.2s' },
-  tipoCardSelected: { borderColor: '#4c1c72', backgroundColor: '#f3eef9' },
+  tipoCard: { padding: '20px 16px', border: '2px solid #e5e7eb', borderRadius: '12px', cursor: 'pointer', textAlign: 'center' },
   tipoIcon: { fontSize: '32px', marginBottom: '10px' },
   tipoTitle: { fontSize: '14px', fontWeight: '700', color: '#111827', marginBottom: '4px' },
   tipoDesc: { fontSize: '12px', color: '#4b5563', lineHeight: '1.4' },
-  successContainer: { textAlign: 'center' as const, padding: '20px 0' },
+  successContainer: { textAlign: 'center', padding: '20px 0' },
   successIcon: { width: '72px', height: '72px', borderRadius: '50%', backgroundColor: '#f3eef9', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', fontSize: '32px' },
   errorText: { color: '#ef4444', fontSize: '12px', marginTop: '4px' },
+  errorBox: { backgroundColor: '#fef2f2', border: '1.5px solid #fecaca', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', fontSize: '14px', color: '#b91c1c' },
+  loginLink: { textAlign: 'center', marginTop: '24px', fontSize: '14px', color: '#4b5563' },
+  link: { color: '#4c1c72', fontWeight: '600', textDecoration: 'none' },
 };
 
 function Step1({ formData, onChange, onNext }: any) {
@@ -92,12 +91,12 @@ function Step1({ formData, onChange, onNext }: any) {
         {errors.confirmPassword && <p style={styles.errorText}>{errors.confirmPassword}</p>}
       </div>
       <button style={styles.btnPrimary} onClick={() => { if (validate()) onNext(); }}>Continuar →</button>
-      <p style={styles.loginLink}>¿Ya tienes cuenta?{' '}<Link href="/login" style={styles.link}>Inicia sesión</Link></p>
+      <p style={styles.loginLink}>¿Ya tienes cuenta? <Link href="/login" style={styles.link}>Inicia sesión</Link></p>
     </>
   );
 }
 
-function Step2({ formData, onChange, onNext, onPrev }: any) {
+function Step2({ formData, onChange, onNext, onPrev, loading, apiError }: any) {
   const tipos = [
     { value: 'fisica', icon: '👤', title: 'Persona Física', desc: 'Profesionista independiente, freelancer o emprendedor individual' },
     { value: 'moral', icon: '🏢', title: 'Empresa', desc: 'Sociedad mercantil, civil o cualquier persona moral constituida' },
@@ -106,57 +105,81 @@ function Step2({ formData, onChange, onNext, onPrev }: any) {
     <>
       <h2 style={styles.formTitle}>¿Cómo te registras?</h2>
       <p style={styles.formSubtitle}>Esto determina los documentos que necesitarás para verificar tu cuenta</p>
+      {apiError && <div style={styles.errorBox}>{apiError}</div>}
       <div style={styles.tipoGrid}>
         {tipos.map((t) => (
-          <div key={t.value} style={{ ...styles.tipoCard, ...(formData.tipoPersona === t.value ? styles.tipoCardSelected : {}) }}
-            onClick={() => onChange({ target: { name: 'tipoPersona', value: t.value } })}>
+          <div key={t.value} style={{ ...styles.tipoCard, border: formData.tipoPersona === t.value ? '2px solid #4c1c72' : '2px solid #e5e7eb', backgroundColor: formData.tipoPersona === t.value ? '#f3eef9' : '#ffffff' }} onClick={() => onChange({ target: { name: 'tipoPersona', value: t.value } })}>
             <div style={styles.tipoIcon}>{t.icon}</div>
-            <div style={{ ...styles.tipoTitle, color: formData.tipoPersona === t.value ? COLORS.primary : COLORS.gray900 }}>{t.title}</div>
+            <div style={{ ...styles.tipoTitle, color: formData.tipoPersona === t.value ? '#4c1c72' : '#111827' }}>{t.title}</div>
             <div style={styles.tipoDesc}>{t.desc}</div>
           </div>
         ))}
       </div>
-      <button style={{ ...styles.btnPrimary, opacity: !formData.tipoPersona ? 0.5 : 1, cursor: !formData.tipoPersona ? 'not-allowed' : 'pointer' }}
-        onClick={() => { if (formData.tipoPersona) onNext(); }}>Continuar →</button>
-      <button style={styles.btnSecondary} onClick={onPrev}>← Regresar</button>
+      <button style={{ ...styles.btnPrimary, opacity: (!formData.tipoPersona || loading) ? 0.6 : 1, cursor: (!formData.tipoPersona || loading) ? 'not-allowed' : 'pointer' }} onClick={() => { if (formData.tipoPersona && !loading) onNext(); }} disabled={loading}>
+        {loading ? 'Creando cuenta...' : 'Continuar →'}
+      </button>
+      <button style={styles.btnSecondary} onClick={onPrev} disabled={loading}>← Regresar</button>
     </>
   );
 }
 
-function Step3({ formData, onPrev }: any) {
+function Step3({ formData }: any) {
   return (
     <div style={styles.successContainer}>
       <div style={styles.successIcon}>✉️</div>
-      <h2 style={{ ...styles.formTitle, textAlign: 'center' }}>¡Revisa tu correo!</h2>
+      <h2 style={{ ...styles.formTitle, textAlign: 'center' }}>¡Cuenta creada!</h2>
       <p style={{ ...styles.formSubtitle, textAlign: 'center', marginBottom: '32px' }}>
-        Enviamos un enlace de verificación a <strong style={{ color: COLORS.primary }}>{formData.email}</strong>. Haz clic en el enlace para activar tu cuenta.
+        Tu cuenta fue registrada con el correo <strong style={{ color: '#4c1c72' }}>{formData.email}</strong>. Ya puedes iniciar sesión.
       </p>
-      <div style={{ backgroundColor: COLORS.primaryLight, borderRadius: '12px', padding: '16px', marginBottom: '28px', fontSize: '13px', color: COLORS.gray600, lineHeight: '1.6', textAlign: 'left' }}>
-        💡 <strong>¿No ves el correo?</strong> Revisa tu carpeta de spam. Puede tardar hasta 2 minutos.
-      </div>
       <button style={styles.btnPrimary} onClick={() => window.location.href = '/login'}>Ir a iniciar sesión</button>
-      <button style={styles.btnSecondary} onClick={onPrev}>← Cambiar datos</button>
     </div>
   );
 }
 
 export default function Register() {
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
   const [formData, setFormData] = useState({ nombre: '', email: '', password: '', confirmPassword: '', tipoPersona: '' });
-  const handleChange = (e: any) => setFormData({ ...formData, [e.target.name]: e.target.value });
-  const stepLabels = ['Datos', 'Tipo', 'Verificar'];
+
+  const handleChange = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setApiError('');
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setApiError('');
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre: formData.nombre, email: formData.email, password: formData.password, tipoPersona: formData.tipoPersona }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setApiError(data.error || 'Error al crear la cuenta');
+        setLoading(false);
+        return;
+      }
+      setStep(3);
+    } catch (err) {
+      setApiError('Error de conexión. Por favor intenta de nuevo.');
+    }
+    setLoading(false);
+  };
+
+  const stepLabels = ['Datos', 'Tipo', 'Listo'];
 
   return (
     <>
       <Head>
         <title>Crear cuenta — snap.</title>
-        <meta name="description" content="Crea tu cuenta en SNAP — Sistema Nacional de Proveedores" />
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </Head>
       <div style={styles.page}>
         <div style={styles.leftPanel}>
-          <div style={styles.leftPanelBg} />
-          <div style={styles.leftPanelBg2} />
+          <div style={styles.leftPanelBg} /><div style={styles.leftPanelBg2} />
           <div style={styles.logo}>
             <h1 style={styles.logoText}>snap<span style={styles.logoDot}>.</span></h1>
             <p style={styles.logoSubtitle}>Sistema Nacional de Proveedores</p>
@@ -180,20 +203,18 @@ export default function Register() {
                   return (
                     <div key={s} style={{ display: 'flex', alignItems: 'center', flex: s < 3 ? 1 : 0 }}>
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-                        <div style={{ ...styles.stepCircle, backgroundColor: step >= s ? COLORS.primary : COLORS.gray200, color: step >= s ? COLORS.white : COLORS.gray400 }}>
-                          {step > s ? '✓' : s}
-                        </div>
-                        <span style={{ ...styles.stepLabel, color: step >= s ? COLORS.primary : COLORS.gray400 }}>{label}</span>
+                        <div style={{ ...styles.stepCircle, backgroundColor: step >= s ? '#4c1c72' : '#e5e7eb', color: step >= s ? '#ffffff' : '#9ca3af' }}>{step > s ? '✓' : s}</div>
+                        <span style={{ ...styles.stepLabel, color: step >= s ? '#4c1c72' : '#9ca3af' }}>{label}</span>
                       </div>
-                      {s < 3 && <div style={{ ...styles.stepLine, flex: 1, backgroundColor: step > s ? COLORS.primary : COLORS.gray200, marginBottom: '16px' }} />}
+                      {s < 3 && <div style={{ ...styles.stepLine, flex: 1, backgroundColor: step > s ? '#4c1c72' : '#e5e7eb', marginBottom: '16px' }} />}
                     </div>
                   );
                 })}
               </div>
             </div>
             {step === 1 && <Step1 formData={formData} onChange={handleChange} onNext={() => setStep(2)} />}
-            {step === 2 && <Step2 formData={formData} onChange={handleChange} onNext={() => setStep(3)} onPrev={() => setStep(1)} />}
-            {step === 3 && <Step3 formData={formData} onPrev={() => setStep(2)} />}
+            {step === 2 && <Step2 formData={formData} onChange={handleChange} onNext={handleSubmit} onPrev={() => setStep(1)} loading={loading} apiError={apiError} />}
+            {step === 3 && <Step3 formData={formData} />}
           </div>
         </div>
       </div>
