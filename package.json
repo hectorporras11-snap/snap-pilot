@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "prisma migrate deploy && next start --port ${PORT-3000}",
+    "start": "prisma db push && next start --port ${PORT-3000}",
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
     "migrate:status": "prisma migrate status",
@@ -13,12 +13,14 @@
   },
   "dependencies": {
     "@prisma/client": "4.9.0",
+    "bcryptjs": "^2.4.3",
     "next": "13.1.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "swr": "^2.0.3"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.27",
     "prisma": "4.9.0",
