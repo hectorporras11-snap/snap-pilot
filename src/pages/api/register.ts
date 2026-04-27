@@ -1,8 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 const prisma = new PrismaClient();
+
+function hashPassword(password: string): string {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.scryptSync(password, salt, 64).toString('hex');
+  return `${salt}:${hash}`;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -11,7 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { nombre, email, password, tipoPersona } = req.body;
 
-  // Validaciones básicas
   if (!nombre || !email || !password || !tipoPersona) {
     return res.status(400).json({ error: 'Todos los campos son requeridos' });
   }
@@ -21,7 +26,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Verificar si el correo ya existe
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -30,10 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(409).json({ error: 'Este correo electrónico ya está registrado' });
     }
 
-    // Encriptar contraseña
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = hashPassword(password);
 
-    // Crear usuario en la base de datos
     const user = await prisma.user.create({
       data: {
         nombre,
